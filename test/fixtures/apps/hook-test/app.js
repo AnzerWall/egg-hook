@@ -3,7 +3,6 @@
  * Created by anzer on 2017/2/28.
  */
 module.exports = app => {
-
     app.controllerHook('home', function *(next) {
         console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
         console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
@@ -17,5 +16,4 @@ module.exports = app => {
         this.body += "hook";
         yield next;
     });
-
-}
+};

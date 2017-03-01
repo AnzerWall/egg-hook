@@ -20,17 +20,18 @@
 [download-image]: https://img.shields.io/npm/dm/egg-hook.svg?style=flat-square
 [download-url]: https://npmjs.org/package/egg-hook
 
-<!--
-Description here.
--->
+添加controller级别或者action级别中间件。
 
-## Install
+提供控制器级别 __before和__after这两个前后置action。
+
+## 安装
 
 ```bash
 $ npm i egg-hook --save
 ```
 
-## Usage
+## 用法
+启用插件
 
 ```js
 // {app_root}/config/plugin.js
@@ -40,38 +41,62 @@ exports.hook = {
 };
 ```
 
+启动自定义文件中添加hook
+### app.controllerHook(controllerKey,hook)
+
 ```js
  //app.js
-    app.controllerHook('home', function *(next) {
-        console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
-        console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
-        this.body = "hi, ";
-        yield next;
-
-    });
-    app.actionHook('home', 'index', function *(next) {
-        console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
-        console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
-        this.body += "hook";
-        yield next;
-    });
+app.controllerHook('home', function *(next) {
+    console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
+    console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
+    this.body = "hi, ";
+    yield next;
+});
 ```
+
+### app.actionHook(controllerKey,actionKey,hook)
+
+
+```javascript
+  //app.js
+app.actionHook('home', 'index', function *(next) {
+    console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
+    console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
+    this.body += "hook";
+    yield next;
+});
+```
+
+控制器前后置钩子
+
 ```javascript
 //app/controller/home.js
 module.exports = app => {
     return class home extends app.Controller {
+        __before(){
+            console.log("before");
+
+            const {ctx}=this;
+            if(!ctx.isLogin){
+                return ctx.preventNext();//skip index() and __after()
+            }
+
+        }
         *index() {
-                    console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
-                    console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
+            console.log("action");
+            //ctx.preventNext()      //skip __after()
+        }
+        __after(){
+            console.log("after");
         }
     }
 }
 ```
-## Why and What
+## 应用场景
 
 
-
-## Configuration
+<!--
+## 配置
 
 ```js
 // {app_root}/config/config.default.js
@@ -80,8 +105,8 @@ exports.hook = {
 ```
 
 see [config/config.default.js](config/config.default.js) for more detail.
-
-## Example
+ -->
+<!-- ## Example  -->
 
 <!-- example here -->
 
