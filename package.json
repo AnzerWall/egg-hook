@@ -1,7 +1,7 @@
 {
   "name": "egg-hook",
-  "version": "1.0.0",
-  "description": "controller level hook support",
+  "version": "0.0.2",
+  "description": "controller level middleware",
   "eggPlugin": {
     "name": "hook"
   },

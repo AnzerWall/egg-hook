@@ -42,17 +42,33 @@ exports.hook = {
 
 ```js
  //app.js
- app.beforeHook('home', function *(next) {
+    app.controllerHook('home', function *(next) {
         console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
         console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
         this.body = "hi, ";
-        yield *next;
- });
- app.afterHook('home', function *(next) {
+        yield next;
+
+    });
+    app.actionHook('home', 'index', function *(next) {
+        console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
+        console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
         this.body += "hook";
-        yield *next;
- })
+        yield next;
+    });
 ```
+```javascript
+//app/controller/home.js
+module.exports = app => {
+    return class home extends app.Controller {
+        *index() {
+                    console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
+                    console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
+        }
+    }
+}
+```
+## Why and What
+
 
 
 ## Configuration

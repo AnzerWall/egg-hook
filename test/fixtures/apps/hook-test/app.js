@@ -4,14 +4,18 @@
  */
 module.exports = app => {
 
-    app.beforeHook('home', function *(next) {
+    app.controllerHook('home', function *(next) {
         console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
         console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
         this.body = "hi, ";
-        yield *next;
+        yield next;
+
     });
-    app.afterHook('home', function *(next) {
+    app.actionHook('home', 'index', function *(next) {
+        console.log(this.controllerKey);//GET /   => controller.index  =>  controllerKey=>"home"
+        console.log(this.actionKey);// GET /   => controller.index  =>  actionKey="index"
         this.body += "hook";
-        yield *next;
-    })
+        yield next;
+    });
+
 }
