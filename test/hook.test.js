@@ -4,21 +4,21 @@ const request = require('supertest');
 const mm = require('egg-mock');
 
 describe('test/hook.test.js', () => {
-  let app;
-  before(() => {
-    app = mm.app({
-      baseDir: 'apps/hook-test',
+    let app;
+    before(() => {
+        app = mm.app({
+            baseDir: 'apps/hook-test',
+        });
+        return app.ready();
     });
-    return app.ready();
-  });
 
-  after(() => app.close());
-  afterEach(mm.restore);
+    after(() => app.close());
+    afterEach(mm.restore);
 
-  it('should GET /', () => {
-    return request(app.callback())
+    it('should GET /', () => {
+        return request(app.callback())
       .get('/')
       .expect('hi, hook')
       .expect(200);
-  });
+    });
 });
