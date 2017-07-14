@@ -11,6 +11,7 @@
     "egg-plugin"
   ],
   "dependencies": {
+    "debug": "^2.6.8",
     "is-type-of": "^1.0.0",
     "koa-compose": "^2.5.1"
   },
